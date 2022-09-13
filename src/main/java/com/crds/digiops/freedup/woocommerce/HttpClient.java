@@ -7,10 +7,6 @@ import java.util.Map;
  * @author S RAJAIAH
  * @Date : August 3, 2021
  * @Desc : 
- *
- */
-
-/**
  * Basic interface for HTTP client
  */
 public interface HttpClient {

@@ -9,11 +9,9 @@ import java.util.Map;
  * @author S RAJAIAH
  * @Date : August 3, 2021
  * @Desc : 
- *
- */
-/**
  * Main interface for WooCommerce REST API
  */
+
 public interface WooCommerce {
 
     /**

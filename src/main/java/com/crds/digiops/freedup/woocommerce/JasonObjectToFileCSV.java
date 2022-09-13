@@ -1,13 +1,11 @@
-/**
- * 
- */
+
 package com.crds.digiops.freedup.woocommerce;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Map;
 
-import com.crsrds.digiops.freedup.model.OrderPOJO;
+import com.crds.digiops.freedup.model.OrderPOJO;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -19,7 +17,10 @@ import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 
 /**
  * @author S RAJAIAH
- *
+ * @Date : August 3, 2021
+ * @Desc : Converts Jason to CSV
+ * 
+ * 
  */
 public class JasonObjectToFileCSV {
 
@@ -93,32 +94,6 @@ public class JasonObjectToFileCSV {
 	
 		//return null;
 	}
-//	ObjectMapper mapper = new ObjectMapper();
-//	ObjectWriter writer1 = mapper.writer(new DefaultPrettyPrinter());
-//	
-//	writer1.writeValue(new File("C:/CRossroads-IT/US21469-Woocommerce/orders.json"), jsonDataObject);
-	
-//	String jsonStr1 =                 "shipping_lines": [
-//	                                                     {
-//	                                                         "id": 17651,
-//	                                                         "method_title": "Free shipping",
-//	                                                         "method_id": "free_shipping",
-//	                                                         "instance_id": "2",
-//	                                                         "total": "0.00",
-//	                                                         "total_tax": "0.00",
-//	                                                         "taxes": [],
-//	                                                         "meta_data": [
-//	                                                             {
-//	                                                                 "id": 123798,
-//	                                                                 "key": "Items",
-//	                                                                 "value": "FreedUp App & Workbook - Full App Access & 1 Workbook &times; 1",
-//	                                                                 "display_key": "Items",
-//	                                                                 "display_value": "FreedUp App &amp; Workbook - Full App Access &amp; 1 Workbook &times; 1"
-//	                                                             }
-//	                                                         ]
-//	                                                     }
-//	                                                 ];
-//	
 	
 	
 }

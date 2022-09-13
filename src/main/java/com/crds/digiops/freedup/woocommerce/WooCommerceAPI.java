@@ -3,16 +3,15 @@ package com.crds.digiops.freedup.woocommerce;
 import java.util.List;
 import java.util.Map;
 
-import com.crsrds.digiops.freedup.oauth.OAuthConfig;
-import com.crsrds.digiops.freedup.oauth.OAuthSignature;
+import com.crds.digiops.freedup.oauth.OAuthConfig;
+import com.crds.digiops.freedup.oauth.OAuthSignature;
 
 /**
  * @author S RAJAIAH
- * @Date : August 3, 2021
+ * @Date : August 21, 2021
  * @Desc : Main class that extends woocommerce interface
  *
  */
-
 public class WooCommerceAPI implements WooCommerce {
 
     private static final String API_URL_FORMAT = "%s/wp-json/wc/%s/%s";

@@ -4,10 +4,6 @@ package com.crds.digiops.freedup.woocommerce;
  * @author S RAJAIAH
  * @Date : August 3, 2021
  * @Desc : 
- *
- */
-
-/**
  * Enum with basic WooCommerce endpoints
  */
 public enum EndpointBaseType {
