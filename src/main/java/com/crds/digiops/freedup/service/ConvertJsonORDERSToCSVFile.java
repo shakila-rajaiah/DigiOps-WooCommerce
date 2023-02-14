@@ -8,6 +8,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.text.ParseException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -35,6 +36,7 @@ import com.google.gson.Gson;
  * @author S RAJAIAH
  * @Date : August 14, 2021
  * @Desc : This is The main class that reads a Orders JSON and converts it into meaningful Java Objects
+ * @listening at port 8080: netstat -a -n -o | find "8080"
  *
  */
 public class ConvertJsonORDERSToCSVFile {
@@ -60,35 +62,35 @@ public class ConvertJsonORDERSToCSVFile {
     	return message;
     }
 	
-	/**
-	 * @author srajaiah
-	 * @Date November 15th, 2021
-	 * @Description : Checks if the createDate is in the last Month.
-	 */
-	public static  boolean isWithinDateRangeForPrevMonth(String date) throws ParseException {
-		
-		System.out.println("ConvertJsonFile inside isWithinDateRangeForPrevMonth: " + date);
-		
-		 String createDate = date.substring(4, 6) + "/" + date.substring(6,8) + "/" + date.substring(0, 4);
-		 System.out.println(createDate);
-					
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
-
-		//convert String to LocalDate
-		LocalDate localCreateDate = LocalDate.parse(createDate, formatter);
-		
-
-
-		//localCreateDate.isAfter(localCreateDate);
-
-		// after the last date of the prev + 2 months , i.e. 1st day of the previous month
-		LocalDate startDate = YearMonth.now().minusMonths( 2 ).atEndOfMonth();
-		// before the first day of the current month i.e. the last day of the prev month.
-		LocalDate endDate = YearMonth.now().atDay(1);
-		    
-	    return  localCreateDate.isAfter(startDate) && localCreateDate.isBefore(endDate);			
-		
-	}
+//	/**
+//	 * @author srajaiah
+//	 * @Date November 15th, 2021
+//	 * @Description : Checks if the createDate is in the last Month.
+//	 */
+//	public static  boolean isWithinDateRangeForPrevMonth(String date) throws ParseException {
+//		
+//		System.out.println("ConvertJsonFile inside isWithinDateRangeForPrevMonth: " + date);
+//		
+//		 String createDate = date.substring(4, 6) + "/" + date.substring(6,8) + "/" + date.substring(0, 4);
+//		 System.out.println(createDate);
+//					
+//		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+//
+//		//convert String to LocalDate
+//		LocalDate localCreateDate = LocalDate.parse(createDate, formatter);
+//		
+//
+//
+//		//localCreateDate.isAfter(localCreateDate);
+//
+//		// after the last date of the prev + 2 months , i.e. 1st day of the previous month
+//		LocalDate startDate = YearMonth.now().minusMonths( 2 ).atEndOfMonth();
+//		// before the first day of the current month i.e. the last day of the prev month.
+//		LocalDate endDate = YearMonth.now().atDay(1);
+//		    
+//	    return  localCreateDate.isAfter(startDate) && localCreateDate.isBefore(endDate);			
+//		
+//	}
 	
 	
     
@@ -110,48 +112,37 @@ public class ConvertJsonORDERSToCSVFile {
 	    	  TypeReference<List<OrderPOJO>> typeReference = new TypeReference<List<OrderPOJO>>() {};
 	    	  List<OrderPOJO> orders = mapper.readValue(json, typeReference);
 	    	  System.out.println("orders all : " + orders.toString()); 
+	    	  System.out.println("orders all size : " + orders.size()); 
 	    	  
-	    	  
+	  	      List<OrderPOJO> currOrders = new ArrayList<OrderPOJO>();
+	    	  // choose only the current orders for this period
+	    	  for (OrderPOJO oP: orders ) {
+	    		  String str =oP.getDate_created().substring(0, 10);
+	    		  //System.out.println ("OP Date : " + oP.getDate_created());	    			
+	    			if (DateFormatterUtil.isWithinDateRangeForCurrentMonthFirstHalf(oP)) {
+	    				currOrders.add(oP);
+	    			}
+	    			if (DateFormatterUtil.isWithinDateRangeForPrevMonthSecondHalf(oP)) {
+	    				currOrders.add(oP);
+	    			}
+	    	  }
+	    	  System.out.println("currOrders.size() : " + currOrders.size());
+	    	  System.out.println("currOrders.toString()  : " + currOrders.toString());
+	    	  // create a new Current orders list
 	  	      List<OrderPOJOCSV> orderPOJOs = new ArrayList<OrderPOJOCSV>();
 	  	      List<OrderPOJOCSV> payoutList = new ArrayList<OrderPOJOCSV>();
 	  	      List<OrderPOJOCSV> failedList = new ArrayList<OrderPOJOCSV>();
 	  	      List<OrderPOJOCSV> couplesList = new ArrayList<OrderPOJOCSV>();
 	  	      List<OrderPOJOCSV> indiList = new ArrayList<OrderPOJOCSV>();
 	    	  
-	    	  //int i = 0;
-	    	  for (OrderPOJO oP: orders ) {
-	    		  	OrderPOJOCSV opc = new OrderPOJOCSV();
-	    		  	//'2021-11-15T09:49:04'
-	    		  	String str =oP.getDate_created().substring(0, 10);
-	    		  	String date = str.replace("-", "");
-//  				  if (!isWithinDateRangeForPrevMonth(date)) {
-//	    		  		continue;
-//	    		  }	
-	    		  	String createdDate = date.substring(4, 6) + "/" + date.substring(6,8) + "/" + date.substring(0, 4);
-	    			 //System.out.println(createdDate);
-	    		  	System.out.println( "********createdDate " + createdDate);
-	    		  	//calculate the date range check based on the create date
-	    			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
-	    			//convert String to LocalDate
-	    			LocalDate localCreateDate = LocalDate.parse(createdDate, formatter);
-	    			System.out.println( " localCreateDate:  " + localCreateDate);
-	    			
-	    			if (localCreateDate.getDayOfMonth() <= 15 ) {
-	    				 if (!DateFormatterUtil.isWithinDateRangeForPrevMonthFirstHalf(localCreateDate)) {
-	  	    		  		continue;
-	  	    		  	}	
-	    				
-	    			}
-	    			else if (localCreateDate.getDayOfMonth() >= 16) {
-	    				  if (!DateFormatterUtil.isWithinDateRangeForPrevMonthSecondHalf(localCreateDate)) {
-		  	    		  		continue;
-		  	    		  }	
-	    			}    		  	
+	    	  //changed on 10/17/2022 to add only the orders for the first or second half...
+	    	  //for (OrderPOJO oP: orders ) {
+		      for (OrderPOJO oP: currOrders ) {
+	    		  	OrderPOJOCSV opc = new OrderPOJOCSV();  		  	
 					opc.setOrderId(oP.getId());
 					opc.setFirstName(oP.getShipping().getFirst_name());
 					opc.setLastName(oP.getShipping().getLast_name());
-					opc.setStatus(oP.getStatus());
-					
+					opc.setStatus(oP.getStatus());					
 					opc.setDateCreated(oP.getDate_created());
 					opc.setDiscountTotal(oP.getDiscount_total());	
 					opc.setSubtotalAmount(0.0); // done later after sub total of items 1 & 2 are read...
@@ -274,28 +265,29 @@ public class ConvertJsonORDERSToCSVFile {
 				  System.out.println( opc.getPaymentMethod().equalsIgnoreCase("stripe") && ( !opc.getTransactionId().equals(null)  && !opc.getTransactionId().isEmpty() && !opc.getTransactionId().equals("")) );
 				  
 				  // if it is a stripes file add it to the payoutList
-				  if ( (opc.getPaymentMethod().equalsIgnoreCase("stripe")) && (!opc.getTransactionId().isEmpty()))
+				  // changed on 1/12/2023 as the getPaymentMethod changed sometime in October from stripe to "stripe_cc"
+				  if ( (opc.getPaymentMethod().equalsIgnoreCase("stripe_cc")) && (!opc.getTransactionId().isEmpty()))
 				  {
 					  payoutList.add(opc);
 				  }
-				  else if(opc.getPaymentMethod().equalsIgnoreCase("stripe") && opc.getTransactionId().isEmpty()){
+				  else if(opc.getPaymentMethod().equalsIgnoreCase("stripe_cc") && opc.getTransactionId().isEmpty()){
 					  failedList.add(opc);
 				  }
-				  			 
+				  
 				  //FreedUp App & Workbook - Full App Access & 1 Workbook
 				  // Individual charges
-				  if (opc.getItemName1().equalsIgnoreCase("FreedUp App & Workbook - Full App Access & 1 Workbook") && !opc.getPaymentMethod().equalsIgnoreCase("stripe"))
+				  if (opc.getItemName1().equalsIgnoreCase("FreedUp App & Workbook - Full App Access & 1 Workbook") && !opc.getPaymentMethod().equalsIgnoreCase("stripe_cc"))
 				  {
 					  indiList.add(opc);
 				  }
 				  
 				  //FreedUp App & Workbook - Full App Access & 2 Workbooks (for couples)
 				  // couples charges
-				  if (opc.getItemName1().equalsIgnoreCase("FreedUp App & Workbook - Full App Access & 2 Workbooks (for couples)") && !opc.getPaymentMethod().equalsIgnoreCase("stripe") )
+				  if (opc.getItemName1().equalsIgnoreCase("FreedUp App & Workbook - Full App Access & 2 Workbooks (for couples)") && !opc.getPaymentMethod().equalsIgnoreCase("stripe_cc") )
 				  {
 					  couplesList.add(opc);
 				  }
-	    	 }// orders iteration
+	    	 }// orders iteration for current orders
 	    	  
 	    	  System.out.println(" OrderPOJOS Object : " + orderPOJOs);
 	    	  System.out.println(" ****PAYOUTS  CSV Object : " + payoutList);
@@ -318,6 +310,9 @@ public class ConvertJsonORDERSToCSVFile {
 	      } //try
 	      catch(Exception e) {
 	         e.printStackTrace();
+	         String message = e.getMessage(); 
+	         EmailServiceImpl eser = new EmailServiceImpl();
+	         eser.sendEmailWithError(message); 
 	      }
 	      return "message";
 	      

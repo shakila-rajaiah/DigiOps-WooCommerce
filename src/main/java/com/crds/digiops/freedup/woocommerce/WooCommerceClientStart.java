@@ -97,6 +97,7 @@ public class WooCommerceClientStart {
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			e.getMessage();
 		}
         
 	  System.out.println("orders all : " + orders.toString()); 

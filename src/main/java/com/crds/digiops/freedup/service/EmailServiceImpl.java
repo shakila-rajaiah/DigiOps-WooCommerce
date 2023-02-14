@@ -44,15 +44,17 @@ public class EmailServiceImpl{
 		String toShakila = "shakila.rajaiah@crossroads.net";
 		String toNick = "nick.furnish@crossroads.net";
 		String toLorri = "lori.gerred@crossroads.net";
+		String toCrgs = "crgs.accountspayable@crossroads.net";
 	
 		
 		Email email = new Email();
 		
 		email.setCcRecepient1(toShakila);
 //		email.setToRecepient1(toShakila); // for testing purposes only..
-		email.setToRecepient1(toBeth);                                      
-		email.setToRecepient2(toNick);
-		email.setToRecepient3(toLorri);
+		email.setToRecepient1(toCrgs);  
+//		email.setToRecepient1(toBeth);     
+//		email.setToRecepient2(toNick);
+//		email.setToRecepient3(toLorri);
 		String prevMonth = DateFormatterUtil.getMonth();
 		email.setSubject("*** WooCommerce FreedUp Orders Report for " + prevMonth + " ***");
 		//"Testing attaching Multiple Citilink Files from Java Application"
@@ -62,6 +64,31 @@ public class EmailServiceImpl{
 				+ " saved here: "
 				+"\r\n" 
 				 + file1);
+		email.setFrom(fromEmail);	
+
+		return email;
+		
+	}
+	
+	
+	private  Email createEmailUser(String errorMessage) {
+		String fromEmail = "srahaiah14@gmail.com";
+		String toShakila = "shakila.rajaiah@crossroads.net";
+		String toCrgs = "crgs.accountspayable@crossroads.net";
+	
+		
+		Email email = new Email();
+		
+		email.setCcRecepient1(toShakila);
+//		email.setToRecepient1(toShakila); // for testing purposes only..
+		email.setToRecepient1(toCrgs);  
+		String prevMonth = DateFormatterUtil.getMonth();
+		email.setSubject("*** ERROR **** Processing WooCommerce FreedUp Orders Report for " + prevMonth + " ***");
+		email.setMessageBody("This email was generated from the WooCommerce - FreedUp Report Application." +"\r\n" 
+				+ "Enclosed is the FreedUp Orders Report File  "+"\r\n" 
+				+ " saved here: "
+				+"\r\n" 
+				 + errorMessage);
 		email.setFrom(fromEmail);	
 
 		return email;
@@ -137,5 +164,71 @@ public class EmailServiceImpl{
 		return "Email was sent Successfully";
 	}
 
+	public  String sendEmailWithError(String errorMessage) {
+		//authentication info for digiopsapps email
+		final String username = "digiopsapps@crossroads.net";
+		final String password = "wkpugrldfgcfssqs";
+		
+		Properties properties = new Properties();
+		
+		properties.put("mail.smtp.auth", "true");
+		properties.put("mail.smtp.starttls.enable", "true");
+		properties.put("mail.smtp.host", "smtp.gmail.com");
+		properties.put("mail.smtp.port", "587");
+		
+		Session session = Session.getInstance(properties, new javax.mail.Authenticator() {
+			protected javax.mail.PasswordAuthentication getPasswordAuthentication() {
+				return new javax.mail.PasswordAuthentication(username,password);
+			}
+		});
+		// create the email object
+	  	Email email = createEmailUser(errorMessage);
+	  	//System.out.println("***** created emaiUserl");
+		//Start our mail message
+		MimeMessage msg = new MimeMessage(session);
+		try {
+			msg.setFrom(new InternetAddress(email.getFrom()));
+			msg.addRecipient(Message.RecipientType.TO, new InternetAddress(email.getToRecepient1()));
+			msg.addRecipient(Message.RecipientType.CC, new InternetAddress(email.getCcRecepient1()));
+			
+			
+			msg.setSubject(email.getSubject());
+			
+			Multipart emailContent = new MimeMultipart();
+			
+			//Text body part
+			MimeBodyPart textBodyPart = new MimeBodyPart();
+			textBodyPart.setText(email.getMessageBody());
+			
+
+			//Attachment body part.
+			MimeBodyPart pdfAttachment = new MimeBodyPart();
+
+//			pdfAttachment.attachFile(multiTabFile);
+		
+			//Attach body parts
+			emailContent.addBodyPart(textBodyPart);
+			//emailContent.addBodyPart(pdfAttachment);
+
+			
+			//Attach multipart to message
+			msg.setContent(emailContent);
+			
+			Transport.send(msg);
+			System.out.println("*** Sent message from email service for FreedUp***");
+			logger.info("*** Sent message from email service ***");
+		} catch (MessagingException e) {
+			e.printStackTrace();
+			logger.error("Error Sending Email" + e);
+			return "Error Sending Email";
+
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			logger.info("Error Sending Email" +e);
+			return "Error Sending Email";
+		}
+		return "Email was sent Successfully";
+	}
 
 }
