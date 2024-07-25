@@ -5,6 +5,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import com.crds.digiops.freedup.oauth.OAuthConfig;
 import com.crds.digiops.freedup.woocommerce.ApiVersionType;
@@ -17,11 +18,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+//@SpringBootTest
 public class WooCommerceClientTest {
 
     private static final String CONSUMER_KEY = "ck_d35e7be7cc695d87f23490729dd80e173f88c8f5";
     private static final String CONSUMER_SECRET = "cs_53a835760712ebf0c8bcf2a21197af4b2323a052";
-    private static final String WC_URL = "http://localhost/index.php";
+    //private static final String WC_URL = "http://localhost/index.php";
+    private static final String WC_URL = "https://getfreedup.com"; //for testing
 
     private WooCommerce wooCommerce;
 
@@ -42,7 +45,7 @@ public class WooCommerceClientTest {
         Assert.assertNotNull(product);
     }
 
-    @Ignore
+//    @Ignore
     @Test
     public void apiGetAllProductsTest() {
         Map<String, String> params = new HashMap<>();
@@ -52,7 +55,7 @@ public class WooCommerceClientTest {
         Assert.assertNotNull(products);
     }
 
-    @Ignore
+   // @Ignore
     @Test
     public void apiGetProductTest() {
         Map product = wooCommerce.get(EndpointBaseType.PRODUCTS.getValue(), 79);

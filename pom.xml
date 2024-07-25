@@ -2,6 +2,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
+	<!-- Created by Shakila Rajaiah -->
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
@@ -16,7 +17,7 @@
 	<description>FreedUp application that calls WooCommerce</description>
 	<properties>
 		<java.version>1.8</java.version>
-		<start-class>com.crds.digiops.freedup.app.FreedUpWooCommerceAPIApplication</start-class>
+		<start-class>com.crds.digiops.freedup.app.FreedUpWooCommerceApplication</start-class>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -65,12 +66,12 @@
 		    <artifactId>jackson-dataformat-csv</artifactId>
 		    <version>2.11.1</version>
 		</dependency>
-		        <!-- https://mvnrepository.com/artifact/org.json/json -->
-		<dependency>
-		    <groupId>org.json</groupId>
-		    <artifactId>json</artifactId>
-		    <version>20210307</version>
-		</dependency>
+		
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20230227</version>
+        </dependency>
 		
 		<!-- https://mvnrepository.com/artifact/com.google.code.gson/gson -->
 		<dependency>
@@ -83,8 +84,91 @@
             <version>${junit.version}</version>
             <scope>test</scope>
         </dependency> 
+        
+        <!-- https://mvnrepository.com/artifact/javax.servlet/jstl -->
+		<dependency>
+		    <groupId>javax.servlet</groupId>
+		    <artifactId>jstl</artifactId>
+		    <version>1.2</version>
+		</dependency>
+		
+	        <!-- https://mvnrepository.com/artifacts added on May 20 2024 -->	
+		<dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        
+        <dependency>
+	        <groupId>javax.servlet.jsp</groupId>
+	        <artifactId>javax.servlet.jsp-api</artifactId>
+	        <version>2.3.1</version>
+	        <scope>provided</scope>
+    	</dependency>
+		
+<!-- 		 <dependency>
+            <groupId>org.apache.tomcat.embed</groupId>
+            <artifactId>tomcat-embed-jasper</artifactId>
+        </dependency> -->
+        
+        <!-- https://mvnrepository.com/artifact/xalan/xalan commented out due to not using the jars-->
+<!-- <dependency>
+    <groupId>xalan</groupId>
+    <artifactId>xalan</artifactId>
+    <version>2.7.3</version>
+</dependency> -->
+        
+        
+<!-- https://mvnrepository.com/artifact/org.apache.xmlgraphics/batik-ttf2svg -->
+<!-- <dependency>
+    <groupId>org.apache.xmlgraphics</groupId>
+    <artifactId>batik-ttf2svg</artifactId>
+    <version>1.13</version>
+</dependency> -->
+
+<!-- https://mvnrepository.com/artifact/org.apache.xmlgraphics/batik-i18n -->
+<!-- <dependency>
+    <groupId>org.apache.xmlgraphics</groupId>
+    <artifactId>batik-i18n</artifactId>
+    <version>1.13</version>
+</dependency> -->
+
+<!-- <dependency>
+    <groupId>org.apache.xmlgraphics</groupId>
+    <artifactId>batik-svgpp</artifactId>
+    <version>1.13</version>
+</dependency> -->
+<!-- https://mvnrepository.com/artifact/org.apache.xmlgraphics/batik-dom -->
+<!-- <dependency>
+    <groupId>org.apache.xmlgraphics</groupId>
+    <artifactId>batik-dom</artifactId>
+    <version>1.13</version>
+</dependency> -->
+<!-- https://mvnrepository.com/artifact/xalan/xalan -->
+<!-- <dependency>
+    <groupId>xalan</groupId>
+    <artifactId>xalan</artifactId>
+    <version>2.7.2</version>
+</dependency> -->
+
+<!-- https://mvnrepository.com/artifact/xalan/serializer -->
+<!-- <dependency>
+    <groupId>xalan</groupId>
+    <artifactId>serializer</artifactId>
+    <version>2.7.2</version>
+</dependency> -->
+
+	<!-- https://mvnrepository.com/artifact/org.apache.xmlgraphics/batik-script -->
+<!-- <dependency>
+    <groupId>org.apache.xmlgraphics</groupId>
+    <artifactId>batik-script</artifactId>
+    <version>1.13</version>
+</dependency> -->
+		
 	</dependencies>
 
+<!-- If you're using Spring Boot, you can also leverage the Spring Boot Maven plugin 
+     to help identify and exclude unnecessary dependencies. -->
 	<build>
 	<finalName>freedup</finalName>
 		<plugins>

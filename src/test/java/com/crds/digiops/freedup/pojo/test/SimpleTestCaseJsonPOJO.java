@@ -1,5 +1,9 @@
 package com.crds.digiops.freedup.pojo.test;
 
+import org.springframework.boot.test.context.SpringBootTest;
+
+//@SpringBootTest
+@SuppressWarnings("unused")
 public class SimpleTestCaseJsonPOJO {
 	
 	private String name;
