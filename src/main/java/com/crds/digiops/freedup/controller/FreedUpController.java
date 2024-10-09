@@ -79,7 +79,6 @@ public class FreedUpController {
 		 return "index"; // This refers to index.jsp in /WEB-INF/views/
 	}
 	
-	
 
 	
 	
@@ -158,6 +157,8 @@ public class FreedUpController {
 	 * @Author: Shakila Rajaiah
 	 * @Date April 2, 2021
 	 * @Desc: Convert a string date to long..
+	 * startDate =2024-10-03
+	 * endDate = 2024-08-30
 	 */
 	public String getFreedUpReport(String startDate, String endDate) throws Exception {
 		

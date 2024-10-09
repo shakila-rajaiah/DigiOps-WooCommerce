@@ -27,10 +27,12 @@ import com.crds.digiops.freedup.controller.FreedUpController;
  * @author S RAJAIAH
  * @Date : August 2, 2022
  * @Desc : This is The main class re-written for the Freed-Up App.
+ * startDate = 2024-09-30
+ * @end date = 2024-09-30
  *
  */
 //lets you scan every component that you want to scan.
-
+@EnableScheduling
 @ComponentScan(basePackageClasses=FreedUpController.class)
 @SpringBootApplication
 public class FreedUpWooCommerceApplication {
@@ -42,8 +44,8 @@ public class FreedUpWooCommerceApplication {
 		
 		SpringApplication.run(FreedUpWooCommerceApplication.class, args);
 		
-//		FreedUpController fc = new FreedUpController();
-//			
+		FreedUpController fc = new FreedUpController();
+			
 //		try {
 //			fc.getWooCommerceOrdersReport(null, null);
 //			
@@ -52,8 +54,14 @@ public class FreedUpWooCommerceApplication {
 //			e.printStackTrace();
 //			logger.error(e.getMessage());
 //		}
-//		
-//		logger.info("Scheduler run at {}", dateFormat.format(new Date()));
+		
+		logger.info("Scheduler run at {}", dateFormat.format(new Date()));
+		
+		// FOR RUNNING FROM Bangkok for the month of september
+		//scheduleTaskUsingCronExpressionPreviousMonth();
+		
+		String message =  fc.getFreedUpReport("2024-08-30", "2024-10-03") ;
+		
 
 	}
 
@@ -70,8 +78,8 @@ public class FreedUpWooCommerceApplication {
 	 *	 <second> <minute> <hour> <day-of-month> <month> <day-of-week> <command>
 	 */
 	// Schedule a cron job to run the WooCommerce Freed-Upreport testing 
+	
 	@Scheduled(cron = "0 15 14 ? * MON-FRI")//schedule a task to run at 2.15 PM DAILY for testing.  
-	//in test to test for server activity.
 	public void scheduleTaskUsingCronExpressionFreedUpWeeklyTest() throws ParseException {
 	    String message ="";
 		long now = System.currentTimeMillis() / 1000;
@@ -103,7 +111,7 @@ public class FreedUpWooCommerceApplication {
 	    logger.info("**** message from scheduler for Daily testing for  WEEKLY FREED-UP ORDERS REPORT **** " + message);
 	    
 	    }catch(Exception e) {
-	    	
+	    	e.printStackTrace();
 	    }
 	}
 	
@@ -118,8 +126,9 @@ public class FreedUpWooCommerceApplication {
 	// testing for shakila
 	//@Scheduled(cron = "0 40 15 ? * MON-FRI")//schedule a task to run at 8.10 AM every Weekday in IRPROD1.
 	// Schedule a cron job to run the Freed-Up WooCommerce Freed-Up report TESTING BY SHAKILA
-	@Scheduled(cron = "0 30 07 ? * MON-FRI")//schedule a task to run at 7.30 AM every Weekday in ITPROD1.
-	public void scheduleTaskUsingCronExpressionFreedUpWeeklySystemStatusProd() throws ParseException {
+// changed by SR for testing
+	@Scheduled(cron = "0 30 12 ? * MON-FRI")//schedule a task to run at 7.30 AM every Weekday in ITPROD1.
+	public void scheduleTaskUsingCronExpressionFreedUpSystemStatusProd() throws ParseException {
 	    String message ="";
 	    LocalDateTime now = LocalDateTime.now();
 	    System.out.println("Date Today " + now);
@@ -144,7 +153,7 @@ public class FreedUpWooCommerceApplication {
 	    logger.info("**** message from scheduler for FREED-UP DAILY STATUS REPORT **** " + message);
 	    
 	    }catch(Exception e) {
-	    	
+	    	e.printStackTrace();
 	    }
 	}
 
@@ -159,8 +168,8 @@ public class FreedUpWooCommerceApplication {
 	// testing for shakila
 	//@Scheduled(cron = "0 12 14 ? * MON-FRI")//schedule a task to run at 8.10 AM every Weekday in IRPROD1.
 	// Schedule a cron job to run the Freed-Up WooCommerce report TESTING BY SHAKILA
-	@Scheduled(cron = "0 15 07 ? * MON-FRI")//schedule a task to run at 7.15 AM for server test each weekday in ITDEV1
-	public void scheduleTaskUsingCronExpressionFreedUpWeeklySystemStatusDev() throws ParseException {
+	@Scheduled(cron = "0 15 12 ? * MON-FRI")//schedule a task to run at 7.15 AM for server test each weekday in ITDEV1
+	public void scheduleTaskUsingCronExpressionFreedUpSystemStatusDev() throws ParseException {
 	    String message ="";
 	    
 	    try {
@@ -187,7 +196,7 @@ public class FreedUpWooCommerceApplication {
 	    logger.info("**** message from scheduler for WEEKLY FREED-UP STATUS REPORT **** " + message);
 	    
 	    }catch(Exception e) {
-	    	
+	    	e.printStackTrace();
 	    }
 	}
 	
@@ -206,8 +215,10 @@ public class FreedUpWooCommerceApplication {
 	 *  			  Scheduled(cron = "0 45 13 ? * MON")              
 	 *	 <second> <minute> <hour> <day-of-month> <month> <day-of-week> <command>
 	 */
+
 	// schedule to run the first half of the previous month reports on the 17th of the month 1st to 15t 
-	@Scheduled(cron = "0 45 10 17 * ?")// schedule 17th day of the month, at 10.45 AM 
+	//@Scheduled(cron = "0 45 10 17 * ?")// schedule 17th day of the month, at 10.45 AM 
+	@Scheduled(cron = "0 50 14 17 * ?")// schedule 17th day of the month, at 10.45 AM 
 	public void scheduleTaskUsingCronExpressionFirstHalf() throws ParseException {
 	 
 	    long now = System.currentTimeMillis() / 1000;
@@ -226,8 +237,7 @@ public class FreedUpWooCommerceApplication {
 	 }// scheduler first half of month
 	
 	
-	//@Scheduled(cron = "0 45 10 20 * ?")// for testing schedule a task to run at 10.45 PM 0n the 20th day of the month..
-	// schedule to run on the second half of the previous month reports from 16th to the last day of teh month
+	//schedule to run on the second half of the previous month reports from 16th to the last day of teh month
 	@Scheduled(cron = "0 30 13 03 * ?")// schedule 3rd day of the Month at 1.30 pm
 	public void scheduleTaskUsingCronExpressionSecondHalf() throws ParseException {
 	 
@@ -240,6 +250,26 @@ public class FreedUpWooCommerceApplication {
 		    WooCommerceClientStart wcs = new WooCommerceClientStart();		    
 		    String message = wcs.getWooCommerceOrders("bimonthly"); 		    
 		    System.out.println("**** message from scheduler for report run on on the second half of the previous month reports from 16th to the last day of the month : " + message);		    
+	    
+	    }catch(Exception e) {
+	    	
+	    } 
+	 }// scheduler second half of month
+	
+	//@Scheduled(cron = "0 45 10 20 * ?")// for testing schedule a task to run at 10.45 PM 0n the 20th day of the month..
+	// schedule to run on the second half of the previous month reports from 16th to the last day of teh month
+	@Scheduled(cron = "0 30 10 03 * ?")// schedule 3rd day of the Month at 10.30 pm to run reports for the previous month
+	public static void scheduleTaskUsingCronExpressionPreviousMonth() throws ParseException {
+	 
+	    long now = System.currentTimeMillis() / 1000;
+	    System.out.println(
+	      "schedule tasks using cron jobs on - " + now);
+	    
+	    try {
+	    
+		    WooCommerceClientStart wcs = new WooCommerceClientStart();		    
+		    String message = wcs.getWooCommerceOrders("monthly"); 		    
+		    System.out.println("**** message from scheduler for report run on on the previous month (whole month) : " + message);		    
 	    
 	    }catch(Exception e) {
 	    	
